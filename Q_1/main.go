@@ -18,9 +18,9 @@ func main() {
 	// 맨 뒤에 줄바꿈(\n) 제거
 	readString = readString[:len(readString)-1]
 
-	// 쌍이 맞다는 것은 짝이 맞아야 하므로 항상 짝수여야 한다
+	// 괄호가 올바르게 쓰였다는 것은 짝이 맞아야 하므로 항상 짝수여야 한다
 	if len(readString)%2 != 0 {
-		print(false)
+		println(false)
 		return
 	}
 
@@ -35,29 +35,28 @@ func syntaxChecker(strings []string) bool {
 		if ch == "(" || ch == "[" || ch == "{" {
 			stack = append(stack, ch)
 		} else {
-			if len(stack) > 0 {
-				token := stack[len(stack)-1]
-
-				if ch == ")" {
-					if token == "(" {
-						stack = stack[:len(stack)-1]
-						continue
-					}
-				} else if ch == "]" {
-					if token == "[" {
-						stack = stack[:len(stack)-1]
-						continue
-					}
-				} else if ch == "}" {
-					if token == "{" {
-						stack = stack[:len(stack)-1]
-						continue
-					}
-				}
-				return false
-			} else {
+			if len(stack) < 0 {
 				return false
 			}
+
+			token := stack[len(stack)-1]
+
+			if ch == ")" {
+				if token != "(" {
+					return false
+				}
+			} else if ch == "]" {
+				if token != "[" {
+					return false
+				}
+			} else if ch == "}" {
+				if token != "{" {
+					return false
+				}
+			}
+
+			stack = stack[:len(stack)-1]
+
 		}
 	}
 
